@@ -14,8 +14,9 @@ import com.equipepoca.locacao.Locacao;
 public class Automovel extends Veiculo {
     ModeloAutomovel modelo;
     
-    public Automovel(Marca marca, Estado estado, Locacao locacao, Categoria categoria, double valorDeCompra, String placa, int ano){
+    public Automovel(Marca marca, Estado estado, Locacao locacao, Categoria categoria, double valorDeCompra, String placa, int ano, ModeloAutomovel modelo){
         super(marca, estado, locacao, categoria, valorDeCompra, placa, ano);
+        this.modelo = modelo;
     }
     
     @Override

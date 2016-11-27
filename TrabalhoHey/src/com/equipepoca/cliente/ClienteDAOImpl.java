@@ -14,8 +14,10 @@ public class ClienteDAOImpl implements ClienteDAO {
 
 	private final static String STMT_INCLUIR = "INSERT INTO cliente(nome, sobrenome, rg, cpf, endereco) VALUES(?, ?, ?, ?, ?)";
 	private final static String STMT_UPDATE = "UPDATE cliente SET nome=?, sobrenome=?, rg=?, cpf=?, endereco=? WHERE id=?";
-	private final static String STMT_LISTAR = "SELECT * FROM cliente";
 	private final static String STMT_EXCLUIR = "DELETE FROM cliente WHERE id=?";
+
+	private final static String STMT_LISTAR = "SELECT * FROM cliente";
+	private final static String STMT_GET_BY_ID = "SELECT * FROM cliente WHERE id=?";
 
 	public void incluir(Cliente cliente) {
 		Connection con;
@@ -77,6 +79,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 		PreparedStatement stmt;
 		ResultSet rs;
 		List<Cliente> lista = new ArrayList<>();
+		
 		try {
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(STMT_LISTAR);
@@ -87,6 +90,24 @@ public class ClienteDAOImpl implements ClienteDAO {
 				lista.add(cliente);
 			}
 			return lista;
+		} catch (SQLException ex) {
+			throw new RuntimeException("Erro ao consultar uma lista de autores. Origem=" + ex.getMessage());
+		}
+	}
+
+	@Override
+	public Cliente getById(int id) {
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			PreparedStatement stmt = con.prepareStatement(STMT_GET_BY_ID);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+
+			Cliente cliente = new Cliente(rs.getInt("id"), rs.getString("nome"), rs.getString("sobrenome"),
+					rs.getString("rg"), rs.getString("cpf"), rs.getString("endereco"));
+
+			return cliente;
 		} catch (SQLException ex) {
 			throw new RuntimeException("Erro ao consultar uma lista de autores. Origem=" + ex.getMessage());
 		}

@@ -6,6 +6,7 @@
 package com.equipepoca.telas;
 
 import com.equipepoca.cliente.Cliente;
+import com.equipepoca.cliente.ClienteDAO;
 import com.equipepoca.cliente.ClienteDAOImpl;
 import com.equipepoca.tabelas.TabelaManterClientes;
 
@@ -41,7 +42,8 @@ public class TelaManterClientes extends JFrame {
 		super("Manter Clientes");
 		setTitle("Manter Clientes");
 
-		tabela = new TabelaManterClientes(new ClienteDAOImpl().listarClientes());
+		List<Cliente> listaClientes = new ClienteDAOImpl().listarClientes();
+		tabela = new TabelaManterClientes(listaClientes);
 		tabelaClientes = new JTable(tabela);
 
 		incluirCliente = new JButton("Incluir Cliente");
@@ -71,13 +73,13 @@ public class TelaManterClientes extends JFrame {
 		excluirCliente.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClienteDAOImpl dao = new ClienteDAOImpl();
+				ClienteDAO dao = new ClienteDAOImpl();
 				int[] linhasSelecionadas = tabelaClientes.getSelectedRows();
 				List<Cliente> listaExcluir = new ArrayList<Cliente>();
 				for (int i = 0; i < linhasSelecionadas.length; i++) {
-					Cliente contato = tabela.getCliente(linhasSelecionadas[i]);
-					dao.excluir(contato);
-					listaExcluir.add(contato);
+					Cliente cliente = tabela.getCliente(linhasSelecionadas[i]);
+					dao.excluir(cliente);
+					listaExcluir.add(cliente);
 
 				}
 

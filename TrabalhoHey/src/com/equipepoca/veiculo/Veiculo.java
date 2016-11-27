@@ -52,6 +52,10 @@ public abstract class Veiculo implements VeiculoI {
 		this.id = id;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	public Marca getMarca() {
 		return marca;
 	}

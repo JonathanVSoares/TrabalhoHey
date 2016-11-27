@@ -1,6 +1,5 @@
 package com.equipepoca.tabelas;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,18 +7,17 @@ import javax.swing.table.AbstractTableModel;
 
 import com.equipepoca.veiculo.Veiculo;
 
-public class TabelaVeiculosLocados extends AbstractTableModel {
+public class TabelaVeiculosDisponiveisLocacao extends AbstractTableModel {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6486695824536180783L;
+	private static final long serialVersionUID = -108418777027889315L;
 
-	private final String[] colunas = { "Nome do Cliente", "Placa", "Marca", "Modelo", "Ano", "Data Locação",
-			"Preço Diária", "Dias locado", "Valor Locação" };
+	private final String[] colunas = { "Placa", "Marca", "Modelo", "Ano", "Preço Diária" };
 
 	private List<Veiculo> lista = new ArrayList<>();
 
-	public TabelaVeiculosLocados(List<Veiculo> lista) {
+	public TabelaVeiculosDisponiveisLocacao(List<Veiculo> lista) {
 		this.lista = lista;
 	}
 
@@ -48,24 +46,15 @@ public class TabelaVeiculosLocados extends AbstractTableModel {
 		Veiculo veiculo = lista.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
-			return veiculo.getLocacao().getCliente().getNome();
-		case 1:
 			return veiculo.getPlaca();
+		case 1:
+			return veiculo.getMarca().toString();
 		case 2:
 			return veiculo.getMarca().toString();
 		case 3:
-			return veiculo.getModelo().toString();
+			return Integer.toString(veiculo.getAno());
 		case 4:
-			return String.valueOf(veiculo.getAno());
-		case 5:
-			SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
-			return formatData.format(veiculo.getLocacao().getData());
-		case 6:
-			return String.valueOf(veiculo.getValorDiariaLocacao());
-		case 7:
-			return String.valueOf(veiculo.getLocacao().getDias());
-		case 8:
-			return String.valueOf(veiculo.getLocacao().getValor());
+			return Double.toString(veiculo.getValorDiariaLocacao());
 		default:
 			return null;
 		}

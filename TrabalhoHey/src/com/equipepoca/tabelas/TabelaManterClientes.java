@@ -106,8 +106,8 @@ public class TabelaManterClientes extends AbstractTableModel {
 	}
 
 	public boolean removeCliente(Cliente cliente) {
-		int linha = this.lista.indexOf(cliente);
-		boolean result = this.lista.remove(cliente);
+		int linha = lista.indexOf(cliente);
+		boolean result = lista.remove(cliente);
 		fireTableRowsDeleted(linha, linha);
 		return result;
 	}

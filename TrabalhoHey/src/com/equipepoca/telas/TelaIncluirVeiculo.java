@@ -5,15 +5,20 @@
  */
 package com.equipepoca.telas;
 
+import com.equipepoca.veiculo.Automovel;
 import com.equipepoca.veiculo.Categoria;
 import com.equipepoca.veiculo.Estado;
 import com.equipepoca.veiculo.Marca;
 import com.equipepoca.veiculo.ModeloAutomovel;
 import com.equipepoca.veiculo.ModeloMotocicleta;
 import com.equipepoca.veiculo.ModeloVan;
+import com.equipepoca.veiculo.Motocicleta;
 import com.equipepoca.veiculo.TipoVeiculo;
+import com.equipepoca.veiculo.Van;
+import com.equipepoca.veiculo.Veiculo;
+import com.equipepoca.veiculo.VeiculoDAO;
+import com.equipepoca.veiculo.VeiculoDAOImpl;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
@@ -37,6 +42,15 @@ public class TelaIncluirVeiculo extends JFrame {
 	 */
 	private static final long serialVersionUID = 4213880766225320156L;
 
+	private final JLabel labelTipoVeiculo;
+	private final JLabel labelMarca;
+	private final JLabel labelEstado;
+	private final JLabel labelCategoria;
+	private final JLabel labelModelo;
+	private final JLabel labelValorDeCompra;
+	private final JLabel labelAno;
+	private final JLabel labelPlaca;
+
 	private final JComboBox<TipoVeiculo> tipoVeiculo;
 	private final JComboBox<Marca> marca;
 	private final JComboBox<Estado> estado;
@@ -44,25 +58,25 @@ public class TelaIncluirVeiculo extends JFrame {
 	private final JComboBox<String> modelo;
 	private final JFormattedTextField valorDeCompra;
 	private final JFormattedTextField placa;
+	private final JFormattedTextField ano;
 	private final JButton incluirVeiculo;
-
-	private final JLabel labelTipoVeiculo;
-	private final JLabel labelMarca;
-	private final JLabel labelEstado;
-	private final JLabel labelCategoria;
-	private final JLabel labelModelo;
-	private final JLabel labelValorDeCompra;
-	private final JLabel labelPlaca;
-
-	private final Container contentPane;
 
 	DefaultComboBoxModel<String> model;
 
 	public TelaIncluirVeiculo() {
 		super("Incluir Veiculo");
 
+		labelTipoVeiculo = new JLabel("Tipo do Veiculo:");
+		labelMarca = new JLabel("Marca:");
+		labelEstado = new JLabel("Estado:");
+		labelCategoria = new JLabel("Categoria:");
+		labelModelo = new JLabel("Modelo:");
+		labelValorDeCompra = new JLabel("Valor de Compra:");
+		labelPlaca = new JLabel("Placa:");
+		labelAno = new JLabel("Ano:");
+
 		NumberFormat format = NumberFormat.getCurrencyInstance();
-		
+
 		tipoVeiculo = new JComboBox<TipoVeiculo>(TipoVeiculo.values());
 		marca = new JComboBox<Marca>(Marca.values());
 		estado = new JComboBox<Estado>(Estado.values());
@@ -70,27 +84,26 @@ public class TelaIncluirVeiculo extends JFrame {
 		modelo = new JComboBox<String>();
 		valorDeCompra = new JFormattedTextField(format);
 		placa = new JFormattedTextField();
+		ano = new JFormattedTextField();
 		incluirVeiculo = new JButton("Incluir Veiculo");
-		
-		valorDeCompra.setValue(new Double(0.0));
-		
-		try {
-	        MaskFormatter placaMask = new MaskFormatter("UUU-####");
-	        placaMask.setPlaceholderCharacter('_');
-	        placaMask.install(placa);
-	    } catch (ParseException ex) {
-	    }
-		
-		labelTipoVeiculo = new JLabel("Tipo Do Veiculo:");
-		labelMarca = new JLabel("Marca:");
-		labelEstado = new JLabel("Estado:");
-		labelCategoria = new JLabel("Categoria:");
-		labelModelo = new JLabel("Modelo:");
-		labelValorDeCompra = new JLabel("Valor de Compra:");
-		labelPlaca = new JLabel("Placa:");
 
-		contentPane = getContentPane();
-		contentPane.setLayout(null);
+		valorDeCompra.setValue(new Double(0.0));
+
+		try {
+			MaskFormatter placaMask = new MaskFormatter("UUU-####");
+			placaMask.setPlaceholderCharacter('_');
+			placaMask.install(placa);
+
+			MaskFormatter anoMask = new MaskFormatter("####");
+			anoMask.setPlaceholderCharacter('_');
+			anoMask.install(ano);
+		} catch (ParseException ex) {
+		}
+
+		getContentPane().setLayout(null);
+
+		setSize(300, 400);
+		setLocation(600, 200);
 
 		labelTipoVeiculo.setBounds(10, 10, 110, 20);
 		tipoVeiculo.setBounds(120, 10, 140, 20);
@@ -120,14 +133,24 @@ public class TelaIncluirVeiculo extends JFrame {
 		placa.setBounds(120, 190, 140, 20);
 		add(labelPlaca);
 		add(placa);
-		incluirVeiculo.setBounds(10, 220, 140, 20);
+		labelAno.setBounds(10, 220, 110, 20);
+		ano.setBounds(120, 220, 140, 20);
+		add(labelAno);
+		add(ano);
+		incluirVeiculo.setBounds(10, 250, 140, 20);
 		add(incluirVeiculo);
+
+		tipoVeiculo.setSelectedIndex(-1);
+		marca.setSelectedIndex(-1);
+		estado.setSelectedIndex(-1);
+		categoria.setSelectedIndex(-1);
+		modelo.setSelectedIndex(-1);
 
 		model = new DefaultComboBoxModel<String>();
 		modelo.setModel(model);
 
 		updateModelos();
-		
+
 		tipoVeiculo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -138,17 +161,55 @@ public class TelaIncluirVeiculo extends JFrame {
 		incluirVeiculo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// ToDo: exceptions, criar instancia/JDBC
+				TipoVeiculo tipoVeiculoSelecionado = tipoVeiculo.getItemAt(tipoVeiculo.getSelectedIndex());
+				Marca marcaSelecionada = marca.getItemAt(marca.getSelectedIndex());
+				Estado estadoSelecionado = estado.getItemAt(estado.getSelectedIndex());
+				Categoria categoriaSelecionada = categoria.getItemAt(categoria.getSelectedIndex());
+				String modeloSelecionado = modelo.getItemAt(modelo.getSelectedIndex());
+
+				String sValorDeCompra = valorDeCompra.getText();
+				double valorDeCompraEscolhido = 0;
+				try {
+					valorDeCompraEscolhido = NumberFormat.getCurrencyInstance().parse(sValorDeCompra).doubleValue();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+				String placaEscolhida = placa.getText().replace("-", "");
+				int anoEscolhido = Integer.valueOf(ano.getText());
+
+				Veiculo veiculo;
+
+				switch (tipoVeiculoSelecionado) {
+				case AUTOMOVEL:
+					veiculo = new Automovel(marcaSelecionada, estadoSelecionado, null, categoriaSelecionada,
+							valorDeCompraEscolhido, placaEscolhida, anoEscolhido,
+							ModeloAutomovel.valueOf(modeloSelecionado));
+					break;
+				case MOTOCICLETA:
+					veiculo = new Motocicleta(marcaSelecionada, estadoSelecionado, null, categoriaSelecionada,
+							valorDeCompraEscolhido, placaEscolhida, anoEscolhido,
+							ModeloMotocicleta.valueOf(modeloSelecionado));
+					break;
+				case VAN:
+					veiculo = new Van(marcaSelecionada, estadoSelecionado, null, categoriaSelecionada,
+							valorDeCompraEscolhido, placaEscolhida, anoEscolhido, ModeloVan.valueOf(modeloSelecionado));
+					break;
+				default:
+					return;
+				}
+
+				VeiculoDAO dao = new VeiculoDAOImpl();
+				dao.incluir(veiculo);
 			}
 		});
-		
-		setSize(300, 300);
-		setLocation(600, 200);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void updateModelos() {
+		if (tipoVeiculo.getSelectedIndex() == -1)
+			return;
+
 		model.removeAllElements();
 		switch ((TipoVeiculo) tipoVeiculo.getSelectedItem()) {
 		case AUTOMOVEL:
@@ -166,6 +227,7 @@ public class TelaIncluirVeiculo extends JFrame {
 		default:
 			break;
 		}
+		modelo.setSelectedIndex(-1);
 	}
 
 	public static void main(String[] args) {
