@@ -23,15 +23,15 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.text.MaskFormatter;
 
 /**
  *
  * @author amanda.naito
  */
-public class TelaIncluirVeiculo extends JFrame {
+public class TelaIncluirVeiculo extends JPanel {
 	/**
 	 * 
 	 */
@@ -59,8 +59,6 @@ public class TelaIncluirVeiculo extends JFrame {
 	DefaultComboBoxModel<String> model;
 
 	public TelaIncluirVeiculo() {
-		super("Incluir Veiculo");
-
 		labelTipoVeiculo = new JLabel("Tipo do Veiculo:");
 		labelMarca = new JLabel("Marca:");
 		labelEstado = new JLabel("Estado:");
@@ -94,8 +92,6 @@ public class TelaIncluirVeiculo extends JFrame {
 			anoMask.install(ano);
 		} catch (ParseException ex) {
 		}
-
-		getContentPane().setLayout(null);
 
 		setSize(300, 400);
 		setLocation(600, 200);
@@ -197,8 +193,6 @@ public class TelaIncluirVeiculo extends JFrame {
 				dao.incluir(veiculo);
 			}
 		});
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void updateModelos() {

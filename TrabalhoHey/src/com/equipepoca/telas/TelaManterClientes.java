@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,7 +15,7 @@ import javax.swing.JTable;
  *
  * @author amanda.naito
  */
-public class TelaManterClientes extends JFrame {
+public class TelaManterClientes extends JPanel {
 	/**
 	 * 
 	 */
@@ -29,9 +28,8 @@ public class TelaManterClientes extends JFrame {
 	private final JButton excluirCliente;
 
 	public TelaManterClientes() {
-		super("Manter Clientes");
-		setTitle("Manter Clientes");
-
+		super(new BorderLayout());
+		
 		tabela = new TabelaManterClientes();
 		tabelaClientes = new JTable(tabela);
 
@@ -68,11 +66,5 @@ public class TelaManterClientes extends JFrame {
 				}
 			}
 		});
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	public static void main(String[] args) {
-		new TelaManterClientes().setVisible(true);
 	}
 }

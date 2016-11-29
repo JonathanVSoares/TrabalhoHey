@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -16,7 +16,7 @@ import com.equipepoca.veiculo.Categoria;
 import com.equipepoca.veiculo.Marca;
 import com.equipepoca.veiculo.TipoVeiculo;
 
-public class TelaVenderVeiculo extends JFrame {
+public class TelaVenderVeiculo extends JPanel {
 	/**
 	 * 
 	 */
@@ -36,8 +36,6 @@ public class TelaVenderVeiculo extends JFrame {
 	private final JButton btnVenderVeiculo;
 
 	public TelaVenderVeiculo() {
-		super("Vender Veiculo");
-
 		labelTipoVeiculo = new JLabel("Tipo do Veiculo:");
 		labelMarca = new JLabel("Marca:");
 		labelCategoria = new JLabel("Categoria:");
@@ -57,8 +55,6 @@ public class TelaVenderVeiculo extends JFrame {
 
 		setSize(600, 600);
 		setLocation(50, 50);
-
-		getContentPane().setLayout(null);
 
 		labelTipoVeiculo.setBounds(10, 10, 110, 20);
 		jCBTipoVeiculo.setBounds(120, 10, 140, 20);
@@ -99,8 +95,6 @@ public class TelaVenderVeiculo extends JFrame {
 				tabelaVeiculosDisponiveis.venderVeiculoAt(linhaSelecionada);
 			}
 		});
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void updateVeiculoFilters() {

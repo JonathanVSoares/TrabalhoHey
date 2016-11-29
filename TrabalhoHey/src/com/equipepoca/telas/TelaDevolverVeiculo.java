@@ -5,13 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import com.equipepoca.tabelas.TabelaVeiculosLocados;
 
-public class TelaDevolverVeiculo extends JFrame {
+public class TelaDevolverVeiculo extends JPanel {
 	/**
 	 * 
 	 */
@@ -23,8 +23,6 @@ public class TelaDevolverVeiculo extends JFrame {
 	private final JButton devolverVeiculo;
 
 	public TelaDevolverVeiculo() {
-		super("Devolver Veiculo");
-
 		tabela = new TabelaVeiculosLocados();
 		tabelaVeiculosLocados = new JTable(tabela);
 
@@ -50,8 +48,6 @@ public class TelaDevolverVeiculo extends JFrame {
 				}
 			}
 		});
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public static void main(String[] args){

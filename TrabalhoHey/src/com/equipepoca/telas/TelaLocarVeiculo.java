@@ -12,8 +12,8 @@ import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -27,7 +27,7 @@ import com.equipepoca.veiculo.Categoria;
 import com.equipepoca.veiculo.Marca;
 import com.equipepoca.veiculo.TipoVeiculo;
 
-public class TelaLocarVeiculo extends JFrame {
+public class TelaLocarVeiculo extends JPanel {
 	/**
 	 * 
 	 */
@@ -66,8 +66,6 @@ public class TelaLocarVeiculo extends JFrame {
 	private final DateFormat dateFormat;
 
 	public TelaLocarVeiculo() {
-		super("Locar Veiculo");
-
 		tabelaClienteSimples = new TabelaClienteSimples();
 		tabelaCliente = new JTable(tabelaClienteSimples);
 		tabelaCliente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -111,8 +109,6 @@ public class TelaLocarVeiculo extends JFrame {
 			placaMask.install(jTDataLocacao);
 		} catch (ParseException ex) {
 		}
-
-		getContentPane().setLayout(null);
 
 		setSize(600, 600);
 		setLocation(50, 50);
@@ -204,8 +200,6 @@ public class TelaLocarVeiculo extends JFrame {
 				}
 			}
 		});
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void updateClienteFilters() {
