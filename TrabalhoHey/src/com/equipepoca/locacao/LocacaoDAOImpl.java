@@ -30,7 +30,7 @@ public class LocacaoDAOImpl implements LocacaoDAO {
 			stmt = con.prepareStatement(STMT_INCLUIR, Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, locacao.getDias());
 			stmt.setDouble(2, locacao.getValor());
-			stmt.setDate(3, (Date) locacao.getData().getTime());
+			stmt.setDate(3, new Date(locacao.getData().getTimeInMillis()));
 			stmt.setInt(4, locacao.getCliente().getId());
 			stmt.executeUpdate();
 
@@ -74,7 +74,7 @@ public class LocacaoDAOImpl implements LocacaoDAO {
 			Calendar cal =  new GregorianCalendar();
 			cal.setTime(rs.getDate("data"));
 			
-			Locacao locacao = new Locacao(rs.getInt("dias"), rs.getDouble("valor"), cal, cliente);
+			Locacao locacao = new Locacao(rs.getInt("id"), rs.getInt("dias"), rs.getDouble("valor"), cal, cliente);
 			
 			return locacao;
 		} catch (SQLException ex) {

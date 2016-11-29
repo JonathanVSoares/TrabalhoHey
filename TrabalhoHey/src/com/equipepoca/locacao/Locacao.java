@@ -20,6 +20,14 @@ public class Locacao {
     private Calendar data;
     private Cliente cliente;
 
+    public Locacao(int id, int dias, double valor, Calendar data, Cliente cliente) {
+    	this.id = id;
+        this.dias = dias;
+        this.valor = valor;
+        this.data = data;
+        this.cliente = cliente;
+    }
+
     public Locacao(int dias, double valor, Calendar data, Cliente cliente) {
         this.dias = dias;
         this.valor = valor;

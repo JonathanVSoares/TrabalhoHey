@@ -6,6 +6,7 @@
 package com.equipepoca.tabelas;
 
 import com.equipepoca.cliente.Cliente;
+import com.equipepoca.cliente.ClienteDAO;
 import com.equipepoca.cliente.ClienteDAOImpl;
 
 import java.util.ArrayList;
@@ -22,15 +23,12 @@ public class TabelaManterClientes extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = 3874605235160812234L;
 
-	private final String[] colunas = { "Nome", "Sobre nome", "RG", "CPF", "Endereco" };
+	private final String[] colunas = { "Nome", "Sobrenome", "RG", "CPF", "Endereco" };
 
 	private List<Cliente> lista = new ArrayList<>();
 
-	public TabelaManterClientes(List<Cliente> lista) {
-		this.lista = lista;
-	}
-
 	public TabelaManterClientes() {
+		this.lista = new ClienteDAOImpl().listarClientes();
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class TabelaManterClientes extends AbstractTableModel {
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
+	public String getValueAt(int rowIndex, int columnIndex) {
 		Cliente cliente = lista.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
@@ -105,19 +103,19 @@ public class TabelaManterClientes extends AbstractTableModel {
 		fireTableCellUpdated(row, col);
 	}
 
-	public boolean removeCliente(Cliente cliente) {
-		int linha = lista.indexOf(cliente);
+	public boolean removeClienteAt(int linha) {
+		Cliente cliente = lista.get(linha);
+		
+		ClienteDAO dao = new ClienteDAOImpl();
+		dao.excluir(cliente);
+		
 		boolean result = lista.remove(cliente);
 		fireTableRowsDeleted(linha, linha);
 		return result;
 	}
 
-	public void adicionaCliente(Cliente cliente) {
-		lista.add(cliente);
+	public void adicionaCliente() {
+		lista.add(new Cliente());
 		fireTableRowsInserted(lista.size() - 1, lista.size() - 1);
-	}
-
-	public Cliente getCliente(int linha) {
-		return lista.get(linha);
 	}
 }

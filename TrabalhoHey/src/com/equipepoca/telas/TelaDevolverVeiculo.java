@@ -3,8 +3,6 @@ package com.equipepoca.telas;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,9 +10,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import com.equipepoca.tabelas.TabelaVeiculosLocados;
-import com.equipepoca.veiculo.Veiculo;
-import com.equipepoca.veiculo.VeiculoDAO;
-import com.equipepoca.veiculo.VeiculoDAOImpl;
 
 public class TelaDevolverVeiculo extends JFrame {
 	/**
@@ -30,12 +25,10 @@ public class TelaDevolverVeiculo extends JFrame {
 	public TelaDevolverVeiculo() {
 		super("Devolver Veiculo");
 
-		List<Veiculo> listaVeiculosLocados = new VeiculoDAOImpl().listarLocados();
-
-		tabela = new TabelaVeiculosLocados(listaVeiculosLocados);
+		tabela = new TabelaVeiculosLocados();
 		tabelaVeiculosLocados = new JTable(tabela);
 
-		devolverVeiculo = new JButton("Excluir Cliente");
+		devolverVeiculo = new JButton("Devolver Veiculo");
 
 		setSize(600, 600);
 		setLocation(50, 50);
@@ -43,27 +36,25 @@ public class TelaDevolverVeiculo extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(tabelaVeiculosLocados);
 
+		add(scrollPane, BorderLayout.CENTER);
 		add(devolverVeiculo, BorderLayout.SOUTH);
 
 		devolverVeiculo.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VeiculoDAO dao = new VeiculoDAOImpl();
 				int[] linhasSelecionadas = tabelaVeiculosLocados.getSelectedRows();
 				
-				List<Veiculo> listaExcluir = new ArrayList<Veiculo>();
 				for (int i = 0; i < linhasSelecionadas.length; i++) {
-					Veiculo veiculo = tabela.getVeiculo(linhasSelecionadas[i]);
-					dao.devolver(veiculo);
-					listaExcluir.add(veiculo);
-
-				}
-
-				for (Veiculo veiculo : listaExcluir) {
-					tabela.removeVeiculo(veiculo);
+					tabela.devolverVeiculoAt(linhasSelecionadas[i]);
 				}
 			}
 		});
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public static void main(String[] args){
+		new TelaDevolverVeiculo().setVisible(true);
 	}
 }

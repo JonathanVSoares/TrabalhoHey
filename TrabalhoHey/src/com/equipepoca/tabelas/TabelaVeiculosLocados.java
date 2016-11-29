@@ -6,7 +6,12 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.equipepoca.locacao.Locacao;
+import com.equipepoca.locacao.LocacaoDAO;
+import com.equipepoca.locacao.LocacaoDAOImpl;
 import com.equipepoca.veiculo.Veiculo;
+import com.equipepoca.veiculo.VeiculoDAO;
+import com.equipepoca.veiculo.VeiculoDAOImpl;
 
 public class TabelaVeiculosLocados extends AbstractTableModel {
 	/**
@@ -19,8 +24,8 @@ public class TabelaVeiculosLocados extends AbstractTableModel {
 
 	private List<Veiculo> lista = new ArrayList<>();
 
-	public TabelaVeiculosLocados(List<Veiculo> lista) {
-		this.lista = lista;
+	public TabelaVeiculosLocados() {
+		this.lista = new VeiculoDAOImpl().listarLocados();
 	}
 
 	@Override
@@ -59,7 +64,7 @@ public class TabelaVeiculosLocados extends AbstractTableModel {
 			return String.valueOf(veiculo.getAno());
 		case 5:
 			SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
-			return formatData.format(veiculo.getLocacao().getData());
+			return formatData.format(veiculo.getLocacao().getData().getTime());
 		case 6:
 			return String.valueOf(veiculo.getValorDiariaLocacao());
 		case 7:
@@ -71,8 +76,18 @@ public class TabelaVeiculosLocados extends AbstractTableModel {
 		}
 	}
 
-	public boolean removeVeiculo(Veiculo veiculo) {
-		int linha = lista.indexOf(veiculo);
+	public boolean devolverVeiculoAt(int linha) {
+		Veiculo veiculo = lista.get(linha);
+
+		Locacao locacao = veiculo.getLocacao();
+		
+		veiculo.devolver();
+		VeiculoDAO veiculoDao = new VeiculoDAOImpl();
+		veiculoDao.devolver(veiculo);
+
+		LocacaoDAO locacaoDao = new LocacaoDAOImpl();
+		locacaoDao.excluir(locacao);
+		
 		boolean result = lista.remove(veiculo);
 		fireTableRowsDeleted(linha, linha);
 		return result;

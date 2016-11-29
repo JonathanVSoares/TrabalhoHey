@@ -15,7 +15,7 @@ import com.mysql.jdbc.Statement;
 
 public class VeiculoDAOImpl implements VeiculoDAO {
 
-	private static final String STMT_INCLUIR = "INSERT INTO veiculo(tipo_veiculo, marca, estado, categoria, valor_compra, placa, ano) VALUES(?, ?, ?, ?, ?, ?, ?)";
+	private static final String STMT_INCLUIR = "INSERT INTO veiculo(tipo_veiculo, marca, estado, categoria, modelo, valor_compra, placa, ano) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String STMT_LOCAR = "UPDATE veiculo SET locacao_id=?, estado=? WHERE id=?";
 	private static final String STMT_DEVOLVER = "UPDATE veiculo SET locacao_id=NULL, estado=? WHERE id=?";
 	private static final String STMT_VENDER = "UPDATE veiculo SET estado=? WHERE id=?";
@@ -40,12 +40,13 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 				
 
 			stmt.setString(1, tipoVeiculo);
-			stmt.setString(2, veiculo.getMarca().name());
-			stmt.setString(3, veiculo.getEstado().name());
-			stmt.setString(4, veiculo.getCategoria().name());
-			stmt.setDouble(5, veiculo.getValorParaVenda());
-			stmt.setString(6, veiculo.getPlaca());
-			stmt.setInt(7, veiculo.getAno());
+			stmt.setString(2, veiculo.getMarca().toString());
+			stmt.setString(3, veiculo.getEstado().toString());
+			stmt.setString(4, veiculo.getCategoria().toString());
+			stmt.setString(5, veiculo.getModelo().toString());
+			stmt.setDouble(6, veiculo.getValorParaVenda());
+			stmt.setString(7, veiculo.getPlaca());
+			stmt.setInt(8, veiculo.getAno());
 			stmt.executeUpdate();
 
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -138,8 +139,13 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 			List<Veiculo> lista = new ArrayList<>();
 
 			while (rs.next()) {
-				LocacaoDAO locacaoDao = new LocacaoDAOImpl();
-				Locacao locacao = locacaoDao.getById(rs.getInt("locacao_id"));
+				Locacao locacao = null;
+				
+				int idLocacao = rs.getInt("locacao_id");
+				if (idLocacao != 0){
+					LocacaoDAO locacaoDao = new LocacaoDAOImpl();
+					locacao = locacaoDao.getById(idLocacao);
+				}
 
 				Veiculo veiculo = null;
 
@@ -160,6 +166,7 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 							locacao, Categoria.valueOf(rs.getString("categoria")), rs.getDouble("valor_compra"),
 							rs.getString("placa"), rs.getInt("ano"), ModeloVan.valueOf(rs.getString("modelo")));
 
+				veiculo.setId(rs.getInt("id"));
 				lista.add(veiculo);
 			}
 			return lista;

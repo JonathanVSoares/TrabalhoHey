@@ -1,21 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.equipepoca.telas;
 
-import com.equipepoca.cliente.Cliente;
-import com.equipepoca.cliente.ClienteDAO;
-import com.equipepoca.cliente.ClienteDAOImpl;
 import com.equipepoca.tabelas.TabelaManterClientes;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -42,8 +32,7 @@ public class TelaManterClientes extends JFrame {
 		super("Manter Clientes");
 		setTitle("Manter Clientes");
 
-		List<Cliente> listaClientes = new ClienteDAOImpl().listarClientes();
-		tabela = new TabelaManterClientes(listaClientes);
+		tabela = new TabelaManterClientes();
 		tabelaClientes = new JTable(tabela);
 
 		incluirCliente = new JButton("Incluir Cliente");
@@ -65,26 +54,17 @@ public class TelaManterClientes extends JFrame {
 		incluirCliente.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Cliente cliente = new Cliente();
-				tabela.adicionaCliente(cliente);
+				tabela.adicionaCliente();
 			}
 		});
 
 		excluirCliente.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClienteDAO dao = new ClienteDAOImpl();
 				int[] linhasSelecionadas = tabelaClientes.getSelectedRows();
-				List<Cliente> listaExcluir = new ArrayList<Cliente>();
-				for (int i = 0; i < linhasSelecionadas.length; i++) {
-					Cliente cliente = tabela.getCliente(linhasSelecionadas[i]);
-					dao.excluir(cliente);
-					listaExcluir.add(cliente);
 
-				}
-
-				for (Cliente cliente : listaExcluir) {
-					tabela.removeCliente(cliente);
+				for (int linha : linhasSelecionadas) {
+					tabela.removeClienteAt(linha);
 				}
 			}
 		});

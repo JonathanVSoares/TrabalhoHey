@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.equipepoca.telas;
 
 import com.equipepoca.veiculo.Automovel;
@@ -59,7 +54,7 @@ public class TelaIncluirVeiculo extends JFrame {
 	private final JFormattedTextField valorDeCompra;
 	private final JFormattedTextField placa;
 	private final JFormattedTextField ano;
-	private final JButton incluirVeiculo;
+	private final JButton btnIncluirVeiculo;
 
 	DefaultComboBoxModel<String> model;
 
@@ -85,7 +80,7 @@ public class TelaIncluirVeiculo extends JFrame {
 		valorDeCompra = new JFormattedTextField(format);
 		placa = new JFormattedTextField();
 		ano = new JFormattedTextField();
-		incluirVeiculo = new JButton("Incluir Veiculo");
+		btnIncluirVeiculo = new JButton("Incluir Veiculo");
 
 		valorDeCompra.setValue(new Double(0.0));
 
@@ -137,8 +132,8 @@ public class TelaIncluirVeiculo extends JFrame {
 		ano.setBounds(120, 220, 140, 20);
 		add(labelAno);
 		add(ano);
-		incluirVeiculo.setBounds(10, 250, 140, 20);
-		add(incluirVeiculo);
+		btnIncluirVeiculo.setBounds(10, 250, 140, 20);
+		add(btnIncluirVeiculo);
 
 		tipoVeiculo.setSelectedIndex(-1);
 		marca.setSelectedIndex(-1);
@@ -158,7 +153,7 @@ public class TelaIncluirVeiculo extends JFrame {
 			}
 		});
 
-		incluirVeiculo.addActionListener(new ActionListener() {
+		btnIncluirVeiculo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TipoVeiculo tipoVeiculoSelecionado = tipoVeiculo.getItemAt(tipoVeiculo.getSelectedIndex());

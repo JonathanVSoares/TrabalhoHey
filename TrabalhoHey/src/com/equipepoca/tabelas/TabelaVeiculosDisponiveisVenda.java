@@ -2,14 +2,10 @@ package com.equipepoca.tabelas;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.equipepoca.cliente.Cliente;
-import com.equipepoca.locacao.LocacaoDAO;
-import com.equipepoca.locacao.LocacaoDAOImpl;
 import com.equipepoca.veiculo.Automovel;
 import com.equipepoca.veiculo.Categoria;
 import com.equipepoca.veiculo.Marca;
@@ -20,18 +16,18 @@ import com.equipepoca.veiculo.Veiculo;
 import com.equipepoca.veiculo.VeiculoDAO;
 import com.equipepoca.veiculo.VeiculoDAOImpl;
 
-public class TabelaVeiculosDisponiveisLocacao extends AbstractTableModel {
+public class TabelaVeiculosDisponiveisVenda extends AbstractTableModel {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -108418777027889315L;
+	private static final long serialVersionUID = -923513052747583140L;
 
-	private final String[] colunas = { "Placa", "Marca", "Modelo", "Ano", "Preço Diária" };
+	private final String[] colunas = { "Placa", "Marca", "Modelo", "Ano", "Preço para Venda" };
 
 	private List<Veiculo> lista;
 	private List<Veiculo> listaFiltrada = new ArrayList<>();
 
-	public TabelaVeiculosDisponiveisLocacao() {
+	public TabelaVeiculosDisponiveisVenda() {
 		lista = new VeiculoDAOImpl().listarDisponiveis();
 		listaFiltrada.addAll(lista);
 	}
@@ -70,21 +66,19 @@ public class TabelaVeiculosDisponiveisLocacao extends AbstractTableModel {
 			return Integer.toString(veiculo.getAno());
 		case 4:
 			NumberFormat format = NumberFormat.getCurrencyInstance();
-			return format.format(veiculo.getValorDiariaLocacao());
+			System.out.println(veiculo.getValorParaVenda());
+			return format.format(veiculo.getValorParaVenda());
 		default:
 			return null;
 		}
 	}
 
-	public boolean locarVeiculoAt(int linha, int dias, Calendar data, Cliente cliente) {
+	public boolean venderVeiculoAt(int linha) {
 		Veiculo veiculo = listaFiltrada.get(linha);
-		veiculo.locar(dias, data, cliente);
-
-		LocacaoDAO daoLocacao = new LocacaoDAOImpl();
-		daoLocacao.incluir(veiculo.getLocacao());
+		veiculo.vender();
 
 		VeiculoDAO daoVeiculo = new VeiculoDAOImpl();
-		daoVeiculo.gravarLocacao(veiculo);
+		daoVeiculo.vender(veiculo);
 
 		boolean result = listaFiltrada.remove(veiculo) && lista.remove(veiculo);
 		fireTableRowsDeleted(linha, linha);
@@ -119,8 +113,9 @@ public class TabelaVeiculosDisponiveisLocacao extends AbstractTableModel {
 	public void filterByCategoria(Categoria categoria) {
 		listaFiltrada.removeIf(veiculo -> !veiculo.getCategoria().equals(categoria));
 	}
-	
-	public void updateTable(){
+
+	public void updateTable() {
 		fireTableRowsDeleted(0, getRowCount());
 	}
+
 }
