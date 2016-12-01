@@ -1,6 +1,9 @@
 package com.equipepoca.telas;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,34 +26,39 @@ public class TelaDevolverVeiculo extends JPanel {
 	private final JButton devolverVeiculo;
 
 	public TelaDevolverVeiculo() {
+		super(new GridBagLayout());
+
 		tabela = new TabelaVeiculosLocados();
 		tabelaVeiculosLocados = new JTable(tabela);
 
 		devolverVeiculo = new JButton("Devolver Veiculo");
 
-		setSize(600, 600);
-		setLocation(50, 50);
+		GridBagConstraints constraints = new GridBagConstraints();
 
+		constraints.anchor = GridBagConstraints.LINE_START;
+		constraints.insets = new Insets(10, 10, 10, 10);
+
+		constraints.gridy = 0;
+		constraints.gridx = 0;
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(tabelaVeiculosLocados);
+		scrollPane.setPreferredSize(new Dimension(800, 200));
+		add(scrollPane, constraints);
 
-		add(scrollPane, BorderLayout.CENTER);
-		add(devolverVeiculo, BorderLayout.SOUTH);
+		constraints.anchor = GridBagConstraints.LAST_LINE_END;
+		constraints.gridy = 1;
+		devolverVeiculo.setPreferredSize(new Dimension(150, 20));
+		add(devolverVeiculo, constraints);
 
 		devolverVeiculo.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int[] linhasSelecionadas = tabelaVeiculosLocados.getSelectedRows();
-				
+
 				for (int i = 0; i < linhasSelecionadas.length; i++) {
 					tabela.devolverVeiculoAt(linhasSelecionadas[i]);
 				}
 			}
 		});
-	}
-	
-	public static void main(String[] args){
-		new TelaDevolverVeiculo().setVisible(true);
 	}
 }

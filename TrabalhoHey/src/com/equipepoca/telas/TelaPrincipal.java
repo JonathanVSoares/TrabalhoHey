@@ -37,10 +37,12 @@ public class TelaPrincipal extends JFrame {
 
 		telaAtual = new TelaManterClientes();
 		
-		setSize(700, 600);
+		setLocation(200, 200);
+		setSize(900, 500);
 		
 		add(painelTopo, BorderLayout.NORTH);
 		add(telaAtual, BorderLayout.CENTER);
+		setTitle("Manter Cliente");
 		
 		btnTelaManterCliente.addActionListener(new ActionListener() {
 			@Override
@@ -49,6 +51,7 @@ public class TelaPrincipal extends JFrame {
 				telaAtual = new TelaManterClientes();
 				add(telaAtual, BorderLayout.CENTER);
 				revalidate();
+				setTitle("Manter Cliente");
 			}
 		});
 		
@@ -59,6 +62,7 @@ public class TelaPrincipal extends JFrame {
 				telaAtual = new TelaIncluirVeiculo();
 				add(telaAtual, BorderLayout.CENTER);
 				revalidate();
+				setTitle("Incluir Veiculo");
 			}
 		});
 		
@@ -69,6 +73,7 @@ public class TelaPrincipal extends JFrame {
 				telaAtual = new TelaLocarVeiculo();
 				add(telaAtual, BorderLayout.CENTER);
 				revalidate();
+				setTitle("Locar Veiculo");
 			}
 		});
 		
@@ -79,6 +84,7 @@ public class TelaPrincipal extends JFrame {
 				telaAtual = new TelaDevolverVeiculo();
 				add(telaAtual, BorderLayout.CENTER);
 				revalidate();
+				setTitle("Devolver Veiculo");
 			}
 		});
 		
@@ -89,8 +95,11 @@ public class TelaPrincipal extends JFrame {
 				telaAtual = new TelaVenderVeiculo();
 				add(telaAtual, BorderLayout.CENTER);
 				revalidate();
+				setTitle("Vender Veiculo");
 			}
 		});
+		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	public static void main(String[] args) {

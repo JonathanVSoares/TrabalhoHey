@@ -9,7 +9,6 @@ import com.equipepoca.cliente.Cliente;
 import com.equipepoca.cliente.ClienteDAO;
 import com.equipepoca.cliente.ClienteDAOImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -25,10 +24,13 @@ public class TabelaManterClientes extends AbstractTableModel {
 
 	private final String[] colunas = { "Nome", "Sobrenome", "RG", "CPF", "Endereco" };
 
-	private List<Cliente> lista = new ArrayList<>();
+	private List<Cliente> lista;
+	private List<Cliente> listClientesVeiculoLocado;
 
 	public TabelaManterClientes() {
 		this.lista = new ClienteDAOImpl().listarClientes();
+
+		this.listClientesVeiculoLocado = new ClienteDAOImpl().listarClientesCarroLocado();
 	}
 
 	@Override
@@ -105,13 +107,17 @@ public class TabelaManterClientes extends AbstractTableModel {
 
 	public boolean removeClienteAt(int linha) {
 		Cliente cliente = lista.get(linha);
-		
-		ClienteDAO dao = new ClienteDAOImpl();
-		dao.excluir(cliente);
-		
-		boolean result = lista.remove(cliente);
-		fireTableRowsDeleted(linha, linha);
-		return result;
+		if (!listClientesVeiculoLocado.contains(cliente)) {
+			ClienteDAO dao = new ClienteDAOImpl();
+			dao.excluir(cliente);
+
+			boolean result = lista.remove(cliente);
+			fireTableRowsDeleted(linha, linha);
+			return result;
+		} else {
+			// exception blá blá blá
+			return false;
+		}
 	}
 
 	public void adicionaCliente() {

@@ -14,6 +14,10 @@ import com.equipepoca.veiculo.Veiculo;
 import com.equipepoca.veiculo.VeiculoDAO;
 import com.equipepoca.veiculo.VeiculoDAOImpl;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
@@ -59,6 +63,8 @@ public class TelaIncluirVeiculo extends JPanel {
 	DefaultComboBoxModel<String> model;
 
 	public TelaIncluirVeiculo() {
+		super(new GridBagLayout());
+		
 		labelTipoVeiculo = new JLabel("Tipo do Veiculo:");
 		labelMarca = new JLabel("Marca:");
 		labelEstado = new JLabel("Estado:");
@@ -67,7 +73,7 @@ public class TelaIncluirVeiculo extends JPanel {
 		labelValorDeCompra = new JLabel("Valor de Compra:");
 		labelPlaca = new JLabel("Placa:");
 		labelAno = new JLabel("Ano:");
-
+		
 		NumberFormat format = NumberFormat.getCurrencyInstance();
 
 		tipoVeiculo = new JComboBox<TipoVeiculo>(TipoVeiculo.values());
@@ -93,43 +99,79 @@ public class TelaIncluirVeiculo extends JPanel {
 		} catch (ParseException ex) {
 		}
 
-		setSize(300, 400);
-		setLocation(600, 200);
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		constraints.anchor = GridBagConstraints.LINE_START;
+		constraints.insets = new Insets(10, 10, 10, 10);
+		
+		Dimension defaultDimension = new Dimension(100, 20);
+		
+		constraints.gridy = 0;
+		constraints.gridx = 0;
+		labelTipoVeiculo.setPreferredSize(defaultDimension);
+		add(labelTipoVeiculo, constraints);
+		constraints.gridx = 1;
+		tipoVeiculo.setPreferredSize(defaultDimension);
+		add(tipoVeiculo ,constraints);
 
-		labelTipoVeiculo.setBounds(10, 10, 110, 20);
-		tipoVeiculo.setBounds(120, 10, 140, 20);
-		add(labelTipoVeiculo);
-		add(tipoVeiculo);
-		labelMarca.setBounds(10, 40, 110, 20);
-		marca.setBounds(120, 40, 140, 20);
-		add(labelMarca);
-		add(marca);
-		labelEstado.setBounds(10, 70, 110, 20);
-		estado.setBounds(120, 70, 140, 20);
-		add(labelEstado);
-		add(estado);
-		labelCategoria.setBounds(10, 100, 110, 20);
-		categoria.setBounds(120, 100, 140, 20);
-		add(labelCategoria);
-		add(categoria);
-		labelModelo.setBounds(10, 130, 110, 20);
-		modelo.setBounds(120, 130, 140, 20);
-		add(labelModelo);
-		add(modelo);
-		labelValorDeCompra.setBounds(10, 160, 110, 20);
-		valorDeCompra.setBounds(120, 160, 140, 20);
-		add(labelValorDeCompra);
-		add(valorDeCompra);
-		labelPlaca.setBounds(10, 190, 110, 20);
-		placa.setBounds(120, 190, 140, 20);
-		add(labelPlaca);
-		add(placa);
-		labelAno.setBounds(10, 220, 110, 20);
-		ano.setBounds(120, 220, 140, 20);
-		add(labelAno);
-		add(ano);
-		btnIncluirVeiculo.setBounds(10, 250, 140, 20);
-		add(btnIncluirVeiculo);
+		constraints.gridx = 2;
+		labelMarca.setPreferredSize(defaultDimension);
+		add(labelMarca, constraints);
+		constraints.gridx = 3;
+		marca.setPreferredSize(defaultDimension);
+		add(marca, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 0;
+		labelEstado.setPreferredSize(defaultDimension);
+		add(labelEstado, constraints);
+		constraints.gridx = 1;
+		estado.setPreferredSize(defaultDimension);
+		add(estado, constraints);
+
+		constraints.gridx = 2;
+		labelCategoria.setPreferredSize(defaultDimension);
+		add(labelCategoria, constraints);
+		constraints.gridx = 3;
+		categoria.setPreferredSize(defaultDimension);
+		add(categoria, constraints);
+
+		constraints.gridy = 2;
+		constraints.gridx = 0;
+		labelModelo.setPreferredSize(defaultDimension);
+		add(labelModelo, constraints);
+		constraints.gridx = 1;
+		modelo.setPreferredSize(defaultDimension);
+		add(modelo, constraints);
+
+		constraints.gridx = 2;
+		labelValorDeCompra.setPreferredSize(defaultDimension);
+		add(labelValorDeCompra, constraints);
+		constraints.gridx = 3;
+		valorDeCompra.setPreferredSize(defaultDimension);
+		add(valorDeCompra, constraints);
+
+		constraints.gridy = 3;
+		constraints.gridx = 0;
+		labelPlaca.setPreferredSize(defaultDimension);
+		add(labelPlaca, constraints);
+		constraints.gridx = 1;
+		placa.setPreferredSize(defaultDimension);
+		add(placa, constraints);
+
+		constraints.gridx = 2;
+		labelAno.setPreferredSize(defaultDimension);
+		add(labelAno, constraints);
+		constraints.gridx = 3;
+		ano.setPreferredSize(defaultDimension);
+		add(ano, constraints);
+
+		constraints.gridy = 4;
+		constraints.gridx = 2;
+		constraints.gridwidth = 2;
+		constraints.anchor = GridBagConstraints.LAST_LINE_END;
+		btnIncluirVeiculo.setPreferredSize(new Dimension(120, 20));
+		add(btnIncluirVeiculo, constraints);
 
 		tipoVeiculo.setSelectedIndex(-1);
 		marca.setSelectedIndex(-1);
@@ -217,9 +259,5 @@ public class TelaIncluirVeiculo extends JPanel {
 			break;
 		}
 		modelo.setSelectedIndex(-1);
-	}
-
-	public static void main(String[] args) {
-		new TelaIncluirVeiculo().setVisible(true);
 	}
 }

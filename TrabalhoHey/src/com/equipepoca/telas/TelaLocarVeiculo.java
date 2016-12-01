@@ -1,5 +1,9 @@
 package com.equipepoca.telas;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -33,39 +37,168 @@ public class TelaLocarVeiculo extends JPanel {
 	 */
 	private static final long serialVersionUID = -7485148122304664786L;
 
-	private final JTable tabelaCliente;
-	private final TabelaClienteSimples tabelaClienteSimples;
+	private JTable tabelaCliente;
+	private TabelaClienteSimples tabelaClienteSimples;
 
-	private final JTable tabelaVeiculosDisponiveis;
-	private final TabelaVeiculosDisponiveisLocacao tabelaVeiculos;
+	private JTable tabelaVeiculosDisponiveis;
+	private TabelaVeiculosDisponiveisLocacao tabelaVeiculos;
 
-	private final JLabel labelNomeCliente;
-	private final JLabel labelSobrenomeCliente;
-	private final JLabel labelCPFCliente;
+	private JLabel labelNomeCliente;
+	private JLabel labelSobrenomeCliente;
+	private JLabel labelCPFCliente;
 
-	private final JLabel labelTipoVeiculo;
-	private final JLabel labelMarca;
-	private final JLabel labelCategoria;
+	private JLabel labelTipoVeiculo;
+	private JLabel labelMarca;
+	private JLabel labelCategoria;
 
-	private final JLabel labelDias;
-	private final JLabel labelDataLocacao;
+	private JLabel labelDias;
+	private JLabel labelDataLocacao;
 
-	private final JTextField jTNomeCliente;
-	private final JTextField jTSobrenomeCliente;
-	private final JTextField jTCPFCliente;
+	private JTextField jTNomeCliente;
+	private JTextField jTSobrenomeCliente;
+	private JTextField jTCPFCliente;
 
-	private final JComboBox<TipoVeiculo> jCBTipoVeiculo;
-	private final JComboBox<Marca> jCBMarca;
-	private final JComboBox<Categoria> jCBCategoria;
+	private JComboBox<TipoVeiculo> jCBTipoVeiculo;
+	private JComboBox<Marca> jCBMarca;
+	private JComboBox<Categoria> jCBCategoria;
 
-	private final JTextField jTDias;
-	private final JFormattedTextField jTDataLocacao;
+	private JTextField jTDias;
+	private JFormattedTextField jTDataLocacao;
 
-	private final JButton btnLocarVeiculo;
+	private JButton btnLocarVeiculo;
 
-	private final DateFormat dateFormat;
+	private DateFormat dateFormat;
 
 	public TelaLocarVeiculo() {
+		super(new GridBagLayout());
+
+		initializeElements();
+
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		constraints.anchor = GridBagConstraints.LINE_START;
+		constraints.insets = new Insets(10, 10, 10, 10);
+
+		Dimension defaultDimension = new Dimension(100, 20);
+
+		constraints.gridy = 0;
+
+		constraints.gridx = 0;
+		labelCPFCliente.setPreferredSize(defaultDimension);
+		add(labelCPFCliente, constraints);
+		constraints.gridx = 1;
+		jTCPFCliente.setPreferredSize(defaultDimension);
+		add(jTCPFCliente, constraints);
+
+		constraints.gridx = 2;
+		labelNomeCliente.setPreferredSize(defaultDimension);
+		add(labelNomeCliente, constraints);
+		constraints.gridx = 3;
+		jTNomeCliente.setPreferredSize(defaultDimension);
+		add(jTNomeCliente, constraints);
+
+		constraints.gridx = 4;
+		labelSobrenomeCliente.setPreferredSize(defaultDimension);
+		add(labelSobrenomeCliente, constraints);
+		constraints.gridx = 5;
+		jTSobrenomeCliente.setPreferredSize(defaultDimension);
+		add(jTSobrenomeCliente, constraints);
+
+		constraints.gridy = 2;
+		constraints.gridx = 0;
+		labelTipoVeiculo.setPreferredSize(defaultDimension);
+		add(labelTipoVeiculo, constraints);
+		constraints.gridx = 1;
+		jCBTipoVeiculo.setPreferredSize(defaultDimension);
+		add(jCBTipoVeiculo, constraints);
+
+		constraints.gridx = 2;
+		labelMarca.setPreferredSize(defaultDimension);
+		add(labelMarca, constraints);
+		constraints.gridx = 3;
+		jCBMarca.setPreferredSize(defaultDimension);
+		add(jCBMarca, constraints);
+
+		constraints.gridx = 4;
+		labelCategoria.setPreferredSize(defaultDimension);
+		add(labelCategoria, constraints);
+		constraints.gridx = 5;
+		jCBCategoria.setPreferredSize(defaultDimension);
+		add(jCBCategoria, constraints);
+
+		constraints.gridy = 4;
+		constraints.gridx = 0;
+		labelDias.setPreferredSize(defaultDimension);
+		add(labelDias, constraints);
+		constraints.gridx = 1;
+		jTDias.setPreferredSize(defaultDimension);
+		add(jTDias, constraints);
+
+		constraints.gridx = 2;
+		labelDataLocacao.setPreferredSize(defaultDimension);
+		add(labelDataLocacao, constraints);
+		constraints.gridx = 3;
+		jTDataLocacao.setPreferredSize(defaultDimension);
+		add(jTDataLocacao, constraints);
+
+		constraints.gridy = 5;
+		constraints.gridx = 0;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		btnLocarVeiculo.setPreferredSize(new Dimension(120, 20));
+		add(btnLocarVeiculo, constraints);
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		
+		JScrollPane scrollPaneClientes = new JScrollPane();
+		scrollPaneClientes.setViewportView(tabelaCliente);
+
+		constraints.gridy = 1;
+		scrollPaneClientes.setPreferredSize(new Dimension(500, 70));
+		add(scrollPaneClientes, constraints);
+
+		JScrollPane scrollPaneVeiculos = new JScrollPane();
+		scrollPaneVeiculos.setViewportView(tabelaVeiculosDisponiveis);
+
+		constraints.gridy = 3;
+		scrollPaneVeiculos.setPreferredSize(new Dimension(500, 120));
+		add(scrollPaneVeiculos, constraints);
+
+		jCBTipoVeiculo.setSelectedIndex(-1);
+		jCBMarca.setSelectedIndex(-1);
+		jCBCategoria.setSelectedIndex(-1);
+
+		jTNomeCliente.addKeyListener(new FiltroTabelaClienteListener());
+		jTSobrenomeCliente.addKeyListener(new FiltroTabelaClienteListener());
+		jTCPFCliente.addKeyListener(new FiltroTabelaClienteListener());
+
+		jCBTipoVeiculo.addActionListener(new FiltroTabelaVeiculoListener());
+		jCBMarca.addActionListener(new FiltroTabelaVeiculoListener());
+		jCBCategoria.addActionListener(new FiltroTabelaVeiculoListener());
+
+		btnLocarVeiculo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					int linhaClienteSelecionada = tabelaCliente.getSelectedRow();
+					Cliente cliente = tabelaClienteSimples.getClienteAt(linhaClienteSelecionada);
+
+					int dias = Integer.valueOf(jTDias.getText());
+
+					Calendar dataLocacao = Calendar.getInstance();
+					dataLocacao.setTime(dateFormat.parse(jTDataLocacao.getText()));
+
+					int linhaSelecionada = tabelaVeiculosDisponiveis.getSelectedRow();
+					tabelaVeiculos.locarVeiculoAt(linhaSelecionada, dias, dataLocacao, cliente);
+
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	private void initializeElements() {
+
 		tabelaClienteSimples = new TabelaClienteSimples();
 		tabelaCliente = new JTable(tabelaClienteSimples);
 		tabelaCliente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -109,97 +242,6 @@ public class TelaLocarVeiculo extends JPanel {
 			placaMask.install(jTDataLocacao);
 		} catch (ParseException ex) {
 		}
-
-		setSize(600, 600);
-		setLocation(50, 50);
-
-		labelNomeCliente.setBounds(10, 10, 110, 20);
-		jTNomeCliente.setBounds(120, 10, 140, 20);
-		add(labelNomeCliente);
-		add(jTNomeCliente);
-
-		labelSobrenomeCliente.setBounds(10, 40, 110, 20);
-		jTSobrenomeCliente.setBounds(120, 40, 140, 20);
-		add(labelSobrenomeCliente);
-		add(jTSobrenomeCliente);
-
-		labelCPFCliente.setBounds(10, 70, 110, 20);
-		jTCPFCliente.setBounds(120, 70, 140, 20);
-		add(labelCPFCliente);
-		add(jTCPFCliente);
-
-		JScrollPane scrollPaneClientes = new JScrollPane();
-		scrollPaneClientes.setViewportView(tabelaCliente);
-
-		scrollPaneClientes.setBounds(10, 100, 300, 70);
-		add(scrollPaneClientes);
-
-		labelTipoVeiculo.setBounds(10, 200, 110, 20);
-		jCBTipoVeiculo.setBounds(120, 200, 140, 20);
-		add(labelTipoVeiculo);
-		add(jCBTipoVeiculo);
-
-		labelMarca.setBounds(10, 230, 110, 20);
-		jCBMarca.setBounds(120, 230, 140, 20);
-		add(labelMarca);
-		add(jCBMarca);
-
-		labelCategoria.setBounds(10, 260, 110, 20);
-		jCBCategoria.setBounds(120, 260, 140, 20);
-		add(labelCategoria);
-		add(jCBCategoria);
-
-		JScrollPane scrollPaneVeiculos = new JScrollPane();
-		scrollPaneVeiculos.setViewportView(tabelaVeiculosDisponiveis);
-
-		scrollPaneVeiculos.setBounds(10, 290, 500, 120);
-		add(scrollPaneVeiculos);
-
-		labelDias.setBounds(10, 440, 110, 20);
-		jTDias.setBounds(120, 440, 140, 20);
-		add(labelDias);
-		add(jTDias);
-
-		labelDataLocacao.setBounds(10, 470, 110, 20);
-		jTDataLocacao.setBounds(120, 470, 140, 20);
-		add(labelDataLocacao);
-		add(jTDataLocacao);
-
-		btnLocarVeiculo.setBounds(10, 500, 140, 20);
-		add(btnLocarVeiculo);
-
-		jCBTipoVeiculo.setSelectedIndex(-1);
-		jCBMarca.setSelectedIndex(-1);
-		jCBCategoria.setSelectedIndex(-1);
-
-		jTNomeCliente.addKeyListener(new FiltroTabelaClienteListener());
-		jTSobrenomeCliente.addKeyListener(new FiltroTabelaClienteListener());
-		jTCPFCliente.addKeyListener(new FiltroTabelaClienteListener());
-
-		jCBTipoVeiculo.addActionListener(new FiltroTabelaVeiculoListener());
-		jCBMarca.addActionListener(new FiltroTabelaVeiculoListener());
-		jCBCategoria.addActionListener(new FiltroTabelaVeiculoListener());
-
-		btnLocarVeiculo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					int linhaClienteSelecionada = tabelaCliente.getSelectedRow();
-					Cliente cliente = tabelaClienteSimples.getClienteAt(linhaClienteSelecionada);
-
-					int dias = Integer.valueOf(jTDias.getText());
-
-					Calendar dataLocacao = Calendar.getInstance();
-					dataLocacao.setTime(dateFormat.parse(jTDataLocacao.getText()));
-
-					int linhaSelecionada = tabelaVeiculosDisponiveis.getSelectedRow();
-					tabelaVeiculos.locarVeiculoAt(linhaSelecionada, dias, dataLocacao, cliente);
-
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 
 	private void updateClienteFilters() {
@@ -235,10 +277,6 @@ public class TelaLocarVeiculo extends JPanel {
 			tabelaVeiculos.filterByCategoria(categoriaSelecionada);
 
 		tabelaVeiculos.updateTable();
-	}
-
-	public static void main(String[] args) {
-		new TelaLocarVeiculo().setVisible(true);
 	}
 
 	private class FiltroTabelaClienteListener implements KeyListener {

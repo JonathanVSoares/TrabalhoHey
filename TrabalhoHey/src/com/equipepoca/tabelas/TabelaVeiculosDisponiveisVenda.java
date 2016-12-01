@@ -66,7 +66,6 @@ public class TabelaVeiculosDisponiveisVenda extends AbstractTableModel {
 			return Integer.toString(veiculo.getAno());
 		case 4:
 			NumberFormat format = NumberFormat.getCurrencyInstance();
-			System.out.println(veiculo.getValorParaVenda());
 			return format.format(veiculo.getValorParaVenda());
 		default:
 			return null;

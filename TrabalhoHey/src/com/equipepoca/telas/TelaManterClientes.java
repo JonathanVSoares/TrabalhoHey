@@ -36,12 +36,8 @@ public class TelaManterClientes extends JPanel {
 		incluirCliente = new JButton("Incluir Cliente");
 		excluirCliente = new JButton("Excluir Cliente");
 
-		setSize(600, 600);
-		setLocation(50, 50);
-
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(tabelaClientes);
-		// Adiciona o scrollPane com a tabela no centro do layout
 		add(scrollPane, BorderLayout.CENTER);
 
 		JPanel jPaneBotoes = new JPanel(new GridLayout(1, 2));

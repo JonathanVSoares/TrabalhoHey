@@ -17,6 +17,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 	private final static String STMT_EXCLUIR = "DELETE FROM cliente WHERE id=?";
 
 	private final static String STMT_LISTAR = "SELECT * FROM cliente";
+	private final static String STMT_LISTAR_CARRO_LOCADO = "SELECT * FROM cliente INNER JOIN locacao ON cliente.id = locacao.id_cliente";
 	private final static String STMT_GET_BY_ID = "SELECT * FROM cliente WHERE id=?";
 
 	public void incluir(Cliente cliente) {
@@ -83,6 +84,27 @@ public class ClienteDAOImpl implements ClienteDAO {
 		try {
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(STMT_LISTAR);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Cliente cliente = new Cliente(rs.getInt("id"), rs.getString("nome"), rs.getString("sobrenome"),
+						rs.getString("rg"), rs.getString("cpf"), rs.getString("endereco"));
+				lista.add(cliente);
+			}
+			return lista;
+		} catch (SQLException ex) {
+			throw new RuntimeException("Erro ao consultar uma lista de autores. Origem=" + ex.getMessage());
+		}
+	}
+
+	public List<Cliente> listarClientesCarroLocado() {
+		Connection con;
+		PreparedStatement stmt;
+		ResultSet rs;
+		List<Cliente> lista = new ArrayList<>();
+		
+		try {
+			con = ConnectionFactory.getConnection();
+			stmt = con.prepareStatement(STMT_LISTAR_CARRO_LOCADO);
 			rs = stmt.executeQuery();
 			while (rs.next()) {
 				Cliente cliente = new Cliente(rs.getInt("id"), rs.getString("nome"), rs.getString("sobrenome"),

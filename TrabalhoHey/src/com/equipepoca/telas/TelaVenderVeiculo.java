@@ -1,5 +1,9 @@
 package com.equipepoca.telas;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -36,6 +40,8 @@ public class TelaVenderVeiculo extends JPanel {
 	private final JButton btnVenderVeiculo;
 
 	public TelaVenderVeiculo() {
+		super(new GridBagLayout());
+
 		labelTipoVeiculo = new JLabel("Tipo do Veiculo:");
 		labelMarca = new JLabel("Marca:");
 		labelCategoria = new JLabel("Categoria:");
@@ -53,32 +59,52 @@ public class TelaVenderVeiculo extends JPanel {
 
 		btnVenderVeiculo = new JButton("Vender Veiculo");
 
-		setSize(600, 600);
-		setLocation(50, 50);
+		GridBagConstraints constraints = new GridBagConstraints();
 
-		labelTipoVeiculo.setBounds(10, 10, 110, 20);
-		jCBTipoVeiculo.setBounds(120, 10, 140, 20);
-		add(labelTipoVeiculo);
-		add(jCBTipoVeiculo);
+		constraints.anchor = GridBagConstraints.LINE_START;
+		constraints.insets = new Insets(10, 10, 10, 10);
 
-		labelMarca.setBounds(10, 40, 110, 20);
-		jCBMarca.setBounds(120, 40, 140, 20);
-		add(labelMarca);
-		add(jCBMarca);
+		Dimension defaultDimension = new Dimension(100, 20);
 
-		labelCategoria.setBounds(10, 70, 110, 20);
-		jCBCategoria.setBounds(120, 70, 140, 20);
-		add(labelCategoria);
-		add(jCBCategoria);
+		constraints.gridy = 0;
+		constraints.gridx = 0;
+		labelTipoVeiculo.setPreferredSize(defaultDimension);
+		add(labelTipoVeiculo, constraints);
+		constraints.gridx = 1;
+		jCBTipoVeiculo.setPreferredSize(defaultDimension);
+		add(jCBTipoVeiculo, constraints);
+
+		constraints.gridx = 2;
+		labelMarca.setPreferredSize(defaultDimension);
+		add(labelMarca, constraints);
+		constraints.gridx = 3;
+		jCBMarca.setPreferredSize(defaultDimension);
+		add(jCBMarca, constraints);
+
+		constraints.gridx = 4;
+		labelCategoria.setPreferredSize(defaultDimension);
+		add(labelCategoria, constraints);
+		constraints.gridx = 5;
+		jCBCategoria.setPreferredSize(defaultDimension);
+		add(jCBCategoria, constraints);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(tabelaVeiculos);
 
-		scrollPane.setBounds(10, 100, 500, 120);
-		add(scrollPane);
+		constraints.gridy = 1;
+		constraints.gridx = 0;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
 		
-		btnVenderVeiculo.setBounds(10, 500, 140, 20);
-		add(btnVenderVeiculo);
+		scrollPane.setPreferredSize(new Dimension(700, 300));
+		add(scrollPane, constraints);
+
+
+		constraints.gridy = 2;
+		constraints.gridx = 0;
+		constraints.anchor = GridBagConstraints.LAST_LINE_END;
+		
+		btnVenderVeiculo.setPreferredSize(new Dimension(140, 20));
+		add(btnVenderVeiculo, constraints);
 
 		jCBTipoVeiculo.setSelectedIndex(-1);
 		jCBMarca.setSelectedIndex(-1);
@@ -87,7 +113,7 @@ public class TelaVenderVeiculo extends JPanel {
 		jCBTipoVeiculo.addActionListener(new FiltroTabelaVeiculoListener());
 		jCBMarca.addActionListener(new FiltroTabelaVeiculoListener());
 		jCBCategoria.addActionListener(new FiltroTabelaVeiculoListener());
-		
+
 		btnVenderVeiculo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -113,10 +139,6 @@ public class TelaVenderVeiculo extends JPanel {
 			tabelaVeiculosDisponiveis.filterByCategoria(categoriaSelecionada);
 
 		tabelaVeiculosDisponiveis.updateTable();
-	}
-
-	public static void main(String[] args) {
-		new TelaVenderVeiculo().setVisible(true);
 	}
 
 	private class FiltroTabelaVeiculoListener implements ActionListener {
