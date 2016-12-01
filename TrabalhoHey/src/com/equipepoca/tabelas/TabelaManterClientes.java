@@ -8,6 +8,8 @@ package com.equipepoca.tabelas;
 import com.equipepoca.cliente.Cliente;
 import com.equipepoca.cliente.ClienteDAO;
 import com.equipepoca.cliente.ClienteDAOImpl;
+import com.equipepoca.exception.ClienteBloqueadoExclusaoException;
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -105,7 +107,10 @@ public class TabelaManterClientes extends AbstractTableModel {
 		fireTableCellUpdated(row, col);
 	}
 
-	public boolean removeClienteAt(int linha) {
+	public boolean removeClienteAt(int linha) throws ClienteBloqueadoExclusaoException, LinhaNaoSelecionadaException {
+		if(linha <= 0)
+			throw new LinhaNaoSelecionadaException("Nenhum cliente foi selecionado para a exclusão.");
+		
 		Cliente cliente = lista.get(linha);
 		if (!listClientesVeiculoLocado.contains(cliente)) {
 			ClienteDAO dao = new ClienteDAOImpl();
@@ -115,8 +120,8 @@ public class TabelaManterClientes extends AbstractTableModel {
 			fireTableRowsDeleted(linha, linha);
 			return result;
 		} else {
-			// exception blá blá blá
-			return false;
+			throw new ClienteBloqueadoExclusaoException(
+					"Cliente selecionado possui veículo(s) locado(s) e não pode ser excluído.");
 		}
 	}
 

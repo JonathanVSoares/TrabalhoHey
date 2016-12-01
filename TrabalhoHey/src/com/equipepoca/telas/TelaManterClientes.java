@@ -1,5 +1,7 @@
 package com.equipepoca.telas;
 
+import com.equipepoca.exception.ClienteBloqueadoExclusaoException;
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 import com.equipepoca.tabelas.TabelaManterClientes;
 
 import java.awt.BorderLayout;
@@ -7,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -54,11 +57,14 @@ public class TelaManterClientes extends JPanel {
 
 		excluirCliente.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				int[] linhasSelecionadas = tabelaClientes.getSelectedRows();
-
-				for (int linha : linhasSelecionadas) {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					int linha = tabelaClientes.getSelectedRow();
 					tabela.removeClienteAt(linha);
+				} catch (ClienteBloqueadoExclusaoException e) {
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Cliente bloqueado para exclusão", JOptionPane.ERROR_MESSAGE);
+				} catch (LinhaNaoSelecionadaException e) {
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Nenhum cliente selecionado", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
