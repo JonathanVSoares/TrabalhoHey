@@ -271,8 +271,8 @@ public class TelaIncluirVeiculo extends JPanel {
 		categoria.setSelectedIndex(-1);
 		modelo.setSelectedIndex(-1);
 		valorDeCompra.setValue(0);
-		placa.setValue(0);
-		ano.setValue(0);
+		placa.setValue("");
+		ano.setValue("");
 
 		try {
 			MaskFormatter placaMask = new MaskFormatter("UUU-####");
