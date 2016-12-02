@@ -7,7 +7,7 @@ public class LinhaNaoSelecionadaException extends Exception {
 	private static final long serialVersionUID = 6528106975935756021L;
 	
 	public LinhaNaoSelecionadaException(){
-		super("Nenhuma linha foi selecionada.");
+		super("Selecione uma linha.");
 	}
 	
 	public LinhaNaoSelecionadaException(String message){

@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,6 +27,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.text.MaskFormatter;
 
 import com.equipepoca.cliente.Cliente;
+import com.equipepoca.exception.CampoPreenchidoIncorretamente;
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 import com.equipepoca.tabelas.TabelaClienteSimples;
 import com.equipepoca.tabelas.TabelaVeiculosDisponiveisLocacao;
 import com.equipepoca.veiculo.Categoria;
@@ -62,7 +66,7 @@ public class TelaLocarVeiculo extends JPanel {
 	private JComboBox<Marca> jCBMarca;
 	private JComboBox<Categoria> jCBCategoria;
 
-	private JTextField jTDias;
+	private JFormattedTextField jTDias;
 	private JFormattedTextField jTDataLocacao;
 
 	private JButton btnLocarVeiculo;
@@ -148,7 +152,7 @@ public class TelaLocarVeiculo extends JPanel {
 		add(btnLocarVeiculo, constraints);
 
 		constraints.anchor = GridBagConstraints.CENTER;
-		
+
 		JScrollPane scrollPaneClientes = new JScrollPane();
 		scrollPaneClientes.setViewportView(tabelaCliente);
 
@@ -179,6 +183,8 @@ public class TelaLocarVeiculo extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
+					checkFields();
+					
 					int linhaClienteSelecionada = tabelaCliente.getSelectedRow();
 					Cliente cliente = tabelaClienteSimples.getClienteAt(linhaClienteSelecionada);
 
@@ -189,12 +195,19 @@ public class TelaLocarVeiculo extends JPanel {
 
 					int linhaSelecionada = tabelaVeiculosDisponiveis.getSelectedRow();
 					tabelaVeiculos.locarVeiculoAt(linhaSelecionada, dias, dataLocacao, cliente);
-
+				} catch (LinhaNaoSelecionadaException | CampoPreenchidoIncorretamente e) {
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				} catch (ParseException e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(getParent(), "Data inválida", "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
+	}
+
+	private void checkFields() throws CampoPreenchidoIncorretamente{
+		String textoDias = jTDias.getText();
+		if (textoDias.equals("") || textoDias.contains("[a-zA-Z]+") || Integer.valueOf(textoDias) <= 0)
+			throw new CampoPreenchidoIncorretamente();
 	}
 
 	private void initializeElements() {
@@ -231,7 +244,7 @@ public class TelaLocarVeiculo extends JPanel {
 
 		dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-		jTDias = new JTextField();
+		jTDias = new JFormattedTextField(NumberFormat.getNumberInstance());
 		jTDataLocacao = new JFormattedTextField(dateFormat);
 
 		btnLocarVeiculo = new JButton("Locar Veiculo");
@@ -240,7 +253,8 @@ public class TelaLocarVeiculo extends JPanel {
 			MaskFormatter placaMask = new MaskFormatter("##/##/####");
 			placaMask.setPlaceholderCharacter('_');
 			placaMask.install(jTDataLocacao);
-		} catch (ParseException ex) {
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

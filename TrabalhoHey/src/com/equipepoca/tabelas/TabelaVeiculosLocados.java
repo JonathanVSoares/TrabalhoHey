@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 import com.equipepoca.locacao.Locacao;
 import com.equipepoca.locacao.LocacaoDAO;
 import com.equipepoca.locacao.LocacaoDAOImpl;
@@ -76,18 +77,21 @@ public class TabelaVeiculosLocados extends AbstractTableModel {
 		}
 	}
 
-	public boolean devolverVeiculoAt(int linha) {
+	public boolean devolverVeiculoAt(int linha) throws LinhaNaoSelecionadaException {
+		if (linha < 0)
+			throw new LinhaNaoSelecionadaException();
+
 		Veiculo veiculo = lista.get(linha);
 
 		Locacao locacao = veiculo.getLocacao();
-		
+
 		veiculo.devolver();
 		VeiculoDAO veiculoDao = new VeiculoDAOImpl();
 		veiculoDao.devolver(veiculo);
 
 		LocacaoDAO locacaoDao = new LocacaoDAOImpl();
 		locacaoDao.excluir(locacao);
-		
+
 		boolean result = lista.remove(veiculo);
 		fireTableRowsDeleted(linha, linha);
 		return result;

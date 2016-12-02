@@ -1,5 +1,6 @@
 package com.equipepoca.telas;
 
+import com.equipepoca.exception.CampoPreenchidoIncorretamente;
 import com.equipepoca.veiculo.Automovel;
 import com.equipepoca.veiculo.Categoria;
 import com.equipepoca.veiculo.Estado;
@@ -28,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.MaskFormatter;
 
@@ -64,7 +66,7 @@ public class TelaIncluirVeiculo extends JPanel {
 
 	public TelaIncluirVeiculo() {
 		super(new GridBagLayout());
-		
+
 		labelTipoVeiculo = new JLabel("Tipo do Veiculo:");
 		labelMarca = new JLabel("Marca:");
 		labelEstado = new JLabel("Estado:");
@@ -73,7 +75,7 @@ public class TelaIncluirVeiculo extends JPanel {
 		labelValorDeCompra = new JLabel("Valor de Compra:");
 		labelPlaca = new JLabel("Placa:");
 		labelAno = new JLabel("Ano:");
-		
+
 		NumberFormat format = NumberFormat.getCurrencyInstance();
 
 		tipoVeiculo = new JComboBox<TipoVeiculo>(TipoVeiculo.values());
@@ -96,81 +98,84 @@ public class TelaIncluirVeiculo extends JPanel {
 			MaskFormatter anoMask = new MaskFormatter("####");
 			anoMask.setPlaceholderCharacter('_');
 			anoMask.install(ano);
-		} catch (ParseException ex) {
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 
+		Dimension defaultDimension = new Dimension(100, 20);
+
+		labelTipoVeiculo.setPreferredSize(defaultDimension);
+		tipoVeiculo.setPreferredSize(defaultDimension);
+		labelMarca.setPreferredSize(defaultDimension);
+		marca.setPreferredSize(defaultDimension);
+		labelEstado.setPreferredSize(defaultDimension);
+		estado.setPreferredSize(defaultDimension);
+		labelCategoria.setPreferredSize(defaultDimension);
+		categoria.setPreferredSize(defaultDimension);
+		labelModelo.setPreferredSize(defaultDimension);
+		modelo.setPreferredSize(defaultDimension);
+		labelValorDeCompra.setPreferredSize(defaultDimension);
+		valorDeCompra.setPreferredSize(defaultDimension);
+		labelPlaca.setPreferredSize(defaultDimension);
+		placa.setPreferredSize(defaultDimension);
+		labelAno.setPreferredSize(defaultDimension);
+		ano.setPreferredSize(defaultDimension);
+
+		btnIncluirVeiculo.setPreferredSize(new Dimension(120, 20));
+
 		GridBagConstraints constraints = new GridBagConstraints();
-		
+
 		constraints.anchor = GridBagConstraints.LINE_START;
 		constraints.insets = new Insets(10, 10, 10, 10);
-		
-		Dimension defaultDimension = new Dimension(100, 20);
-		
+
 		constraints.gridy = 0;
 		constraints.gridx = 0;
-		labelTipoVeiculo.setPreferredSize(defaultDimension);
 		add(labelTipoVeiculo, constraints);
 		constraints.gridx = 1;
-		tipoVeiculo.setPreferredSize(defaultDimension);
-		add(tipoVeiculo ,constraints);
+		add(tipoVeiculo, constraints);
 
 		constraints.gridx = 2;
-		labelMarca.setPreferredSize(defaultDimension);
 		add(labelMarca, constraints);
 		constraints.gridx = 3;
-		marca.setPreferredSize(defaultDimension);
 		add(marca, constraints);
 
 		constraints.gridy = 1;
 		constraints.gridx = 0;
-		labelEstado.setPreferredSize(defaultDimension);
 		add(labelEstado, constraints);
 		constraints.gridx = 1;
-		estado.setPreferredSize(defaultDimension);
 		add(estado, constraints);
 
 		constraints.gridx = 2;
-		labelCategoria.setPreferredSize(defaultDimension);
 		add(labelCategoria, constraints);
 		constraints.gridx = 3;
-		categoria.setPreferredSize(defaultDimension);
 		add(categoria, constraints);
 
 		constraints.gridy = 2;
 		constraints.gridx = 0;
-		labelModelo.setPreferredSize(defaultDimension);
 		add(labelModelo, constraints);
 		constraints.gridx = 1;
-		modelo.setPreferredSize(defaultDimension);
 		add(modelo, constraints);
 
 		constraints.gridx = 2;
-		labelValorDeCompra.setPreferredSize(defaultDimension);
 		add(labelValorDeCompra, constraints);
 		constraints.gridx = 3;
-		valorDeCompra.setPreferredSize(defaultDimension);
 		add(valorDeCompra, constraints);
 
 		constraints.gridy = 3;
 		constraints.gridx = 0;
-		labelPlaca.setPreferredSize(defaultDimension);
 		add(labelPlaca, constraints);
 		constraints.gridx = 1;
-		placa.setPreferredSize(defaultDimension);
 		add(placa, constraints);
 
 		constraints.gridx = 2;
-		labelAno.setPreferredSize(defaultDimension);
 		add(labelAno, constraints);
 		constraints.gridx = 3;
-		ano.setPreferredSize(defaultDimension);
 		add(ano, constraints);
 
 		constraints.gridy = 4;
 		constraints.gridx = 2;
 		constraints.gridwidth = 2;
 		constraints.anchor = GridBagConstraints.LAST_LINE_END;
-		btnIncluirVeiculo.setPreferredSize(new Dimension(120, 20));
 		add(btnIncluirVeiculo, constraints);
 
 		tipoVeiculo.setSelectedIndex(-1);
@@ -193,20 +198,28 @@ public class TelaIncluirVeiculo extends JPanel {
 
 		btnIncluirVeiculo.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
+				double valorDeCompraEscolhido = 0;
+				try {
+					checkFields();
+
+					String sValorDeCompra = valorDeCompra.getText();
+					valorDeCompraEscolhido = NumberFormat.getCurrencyInstance().parse(sValorDeCompra).doubleValue();
+				} catch (CampoPreenchidoIncorretamente e) {
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+					return;
+				} catch (ParseException e) {
+					JOptionPane.showMessageDialog(getParent(),
+							"Houve algum problema com o valor de compra. Por favor, redigite-o", "Erro",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
 				TipoVeiculo tipoVeiculoSelecionado = tipoVeiculo.getItemAt(tipoVeiculo.getSelectedIndex());
 				Marca marcaSelecionada = marca.getItemAt(marca.getSelectedIndex());
 				Estado estadoSelecionado = estado.getItemAt(estado.getSelectedIndex());
 				Categoria categoriaSelecionada = categoria.getItemAt(categoria.getSelectedIndex());
 				String modeloSelecionado = modelo.getItemAt(modelo.getSelectedIndex());
-
-				String sValorDeCompra = valorDeCompra.getText();
-				double valorDeCompraEscolhido = 0;
-				try {
-					valorDeCompraEscolhido = NumberFormat.getCurrencyInstance().parse(sValorDeCompra).doubleValue();
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
 				String placaEscolhida = placa.getText().replace("-", "");
 				int anoEscolhido = Integer.valueOf(ano.getText());
 
@@ -233,8 +246,45 @@ public class TelaIncluirVeiculo extends JPanel {
 
 				VeiculoDAO dao = new VeiculoDAOImpl();
 				dao.incluir(veiculo);
+
+				JOptionPane.showMessageDialog(getParent(), "Veiculo Cadastrado com Sucesso!", "Veiculo Cadastrado",
+						JOptionPane.INFORMATION_MESSAGE);
+
+				clearFields();
+			}
+
+			private void checkFields() throws CampoPreenchidoIncorretamente, ParseException {
+				if (tipoVeiculo.getSelectedIndex() < 0 || marca.getSelectedIndex() < 0 || estado.getSelectedIndex() < 0
+						|| categoria.getSelectedIndex() < 0 || modelo.getSelectedIndex() < 0
+						|| placa.getText().replace("-", "").replace("_", "").length() != 7
+						|| ano.getText().replace("_", "").length() != 4
+						|| NumberFormat.getCurrencyInstance().parse(valorDeCompra.getText()).doubleValue() == 0)
+					throw new CampoPreenchidoIncorretamente();
 			}
 		});
+	}
+
+	private void clearFields() {
+		tipoVeiculo.setSelectedIndex(-1);
+		marca.setSelectedIndex(-1);
+		estado.setSelectedIndex(-1);
+		categoria.setSelectedIndex(-1);
+		modelo.setSelectedIndex(-1);
+		valorDeCompra.setValue(0);
+		placa.setValue(0);
+		ano.setValue(0);
+
+		try {
+			MaskFormatter placaMask = new MaskFormatter("UUU-####");
+			placaMask.setPlaceholderCharacter('_');
+			placaMask.install(placa);
+
+			MaskFormatter anoMask = new MaskFormatter("####");
+			anoMask.setPlaceholderCharacter('_');
+			anoMask.install(ano);
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void updateModelos() {

@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import com.equipepoca.cliente.Cliente;
 import com.equipepoca.cliente.ClienteDAOImpl;
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 
 public class TabelaClienteSimples extends AbstractTableModel {
 	/**
@@ -59,7 +60,10 @@ public class TabelaClienteSimples extends AbstractTableModel {
 		}
 	}
 
-	public Cliente getClienteAt(int linha) {
+	public Cliente getClienteAt(int linha) throws LinhaNaoSelecionadaException {
+		if (linha < 0)
+			throw new LinhaNaoSelecionadaException("Selecione um cliente para associar à locação");
+		
 		return listaFiltrada.get(linha);
 	}
 

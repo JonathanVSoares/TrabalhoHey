@@ -32,7 +32,7 @@ public class TelaManterClientes extends JPanel {
 
 	public TelaManterClientes() {
 		super(new BorderLayout());
-		
+
 		tabela = new TabelaManterClientes();
 		tabelaClientes = new JTable(tabela);
 
@@ -62,9 +62,9 @@ public class TelaManterClientes extends JPanel {
 					int linha = tabelaClientes.getSelectedRow();
 					tabela.removeClienteAt(linha);
 				} catch (ClienteBloqueadoExclusaoException e) {
-					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Cliente bloqueado para exclusão", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				} catch (LinhaNaoSelecionadaException e) {
-					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Nenhum cliente selecionado", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

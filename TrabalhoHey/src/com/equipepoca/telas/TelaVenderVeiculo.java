@@ -10,11 +10,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 import com.equipepoca.tabelas.TabelaVeiculosDisponiveisVenda;
 import com.equipepoca.veiculo.Categoria;
 import com.equipepoca.veiculo.Marca;
@@ -116,9 +118,13 @@ public class TelaVenderVeiculo extends JPanel {
 
 		btnVenderVeiculo.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				int linhaSelecionada = tabelaVeiculos.getSelectedRow();
-				tabelaVeiculosDisponiveis.venderVeiculoAt(linhaSelecionada);
+			public void actionPerformed(ActionEvent event) {
+				try{
+					int linhaSelecionada = tabelaVeiculos.getSelectedRow();
+					tabelaVeiculosDisponiveis.venderVeiculoAt(linhaSelecionada);
+				} catch (LinhaNaoSelecionadaException e){
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 import com.equipepoca.veiculo.Automovel;
 import com.equipepoca.veiculo.Categoria;
 import com.equipepoca.veiculo.Marca;
@@ -72,7 +73,10 @@ public class TabelaVeiculosDisponiveisVenda extends AbstractTableModel {
 		}
 	}
 
-	public boolean venderVeiculoAt(int linha) {
+	public boolean venderVeiculoAt(int linha) throws LinhaNaoSelecionadaException {
+		if (linha < 0)
+			throw new LinhaNaoSelecionadaException();
+		
 		Veiculo veiculo = listaFiltrada.get(linha);
 		veiculo.vender();
 

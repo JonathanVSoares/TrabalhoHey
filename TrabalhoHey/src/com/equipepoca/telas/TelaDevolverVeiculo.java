@@ -8,10 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 import com.equipepoca.tabelas.TabelaVeiculosLocados;
 
 public class TelaDevolverVeiculo extends JPanel {
@@ -30,6 +33,7 @@ public class TelaDevolverVeiculo extends JPanel {
 
 		tabela = new TabelaVeiculosLocados();
 		tabelaVeiculosLocados = new JTable(tabela);
+		tabelaVeiculosLocados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		devolverVeiculo = new JButton("Devolver Veiculo");
 
@@ -52,11 +56,13 @@ public class TelaDevolverVeiculo extends JPanel {
 
 		devolverVeiculo.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				int[] linhasSelecionadas = tabelaVeiculosLocados.getSelectedRows();
-
-				for (int i = 0; i < linhasSelecionadas.length; i++) {
-					tabela.devolverVeiculoAt(linhasSelecionadas[i]);
+			public void actionPerformed(ActionEvent event) {
+				try {
+					int linhasSelecionada = tabelaVeiculosLocados.getSelectedRow();
+	
+					tabela.devolverVeiculoAt(linhasSelecionada);
+				} catch (LinhaNaoSelecionadaException e){
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

@@ -108,7 +108,7 @@ public class TabelaManterClientes extends AbstractTableModel {
 	}
 
 	public boolean removeClienteAt(int linha) throws ClienteBloqueadoExclusaoException, LinhaNaoSelecionadaException {
-		if(linha <= 0)
+		if(linha < 0)
 			throw new LinhaNaoSelecionadaException("Nenhum cliente foi selecionado para a exclusão.");
 		
 		Cliente cliente = lista.get(linha);

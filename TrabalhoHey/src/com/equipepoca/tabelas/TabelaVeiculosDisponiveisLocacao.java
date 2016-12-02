@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import com.equipepoca.cliente.Cliente;
+import com.equipepoca.exception.LinhaNaoSelecionadaException;
 import com.equipepoca.locacao.LocacaoDAO;
 import com.equipepoca.locacao.LocacaoDAOImpl;
 import com.equipepoca.veiculo.Automovel;
@@ -76,7 +77,10 @@ public class TabelaVeiculosDisponiveisLocacao extends AbstractTableModel {
 		}
 	}
 
-	public boolean locarVeiculoAt(int linha, int dias, Calendar data, Cliente cliente) {
+	public boolean locarVeiculoAt(int linha, int dias, Calendar data, Cliente cliente) throws LinhaNaoSelecionadaException {
+		if (linha < 0)
+			throw new LinhaNaoSelecionadaException("Selecione um veículo para associar à locação");
+		
 		Veiculo veiculo = listaFiltrada.get(linha);
 		veiculo.locar(dias, data, cliente);
 
